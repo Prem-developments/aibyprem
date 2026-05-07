@@ -1,0 +1,3 @@
+# Prevent Cloudflare Pages asset uploads from including config files
+wrangler.json
+wrangler.jsonc
