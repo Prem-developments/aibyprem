@@ -1,4 +1,10 @@
+<<<<<<< HEAD
 import { Outlet, Link, createRootRoute } from "@tanstack/react-router";
+=======
+import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+
+import appCss from "../styles.css?url";
+>>>>>>> e0a7695abf068a12b609ec137d5bef9777203a82
 
 function NotFoundComponent() {
   return (
@@ -23,10 +29,54 @@ function NotFoundComponent() {
 }
 
 export const Route = createRootRoute({
+<<<<<<< HEAD
+=======
+  head: () => ({
+    meta: [
+      { charSet: "utf-8" },
+      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { title: "Lovable App" },
+      { name: "description", content: "Lovable Generated Project" },
+      { name: "author", content: "Lovable" },
+      { property: "og:title", content: "Lovable App" },
+      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+      { name: "twitter:site", content: "@Lovable" },
+    ],
+    links: [
+      {
+        rel: "stylesheet",
+        href: appCss,
+      },
+    ],
+  }),
+  shellComponent: RootShell,
+>>>>>>> e0a7695abf068a12b609ec137d5bef9777203a82
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
 });
 
+<<<<<<< HEAD
 function RootComponent() {
   return <Outlet />;
 }
+=======
+function RootShell({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en" className="dark" style={{ colorScheme: "dark" }}>
+      <head>
+        <HeadContent />
+      </head>
+      <body>
+        {children}
+        <Scripts />
+      </body>
+    </html>
+  );
+}
+
+function RootComponent() {
+  return <Outlet />;
+}
+>>>>>>> e0a7695abf068a12b609ec137d5bef9777203a82
