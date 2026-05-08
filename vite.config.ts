@@ -57,6 +57,9 @@ function ignoreWranglerConfigInBuild(): Plugin {
 
 export default defineConfig({
 	vite: {
+		css: {
+			transformer: "lightningcss"
+		},
 		build: {
 			assetsInlineLimit: 0
 		},

@@ -4,6 +4,13 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Tailwind v4 wraps `hover:*` utilities in `@media (hover: hover)`.
+  Some embedded previews / touch-first environments report `(hover: none)` even
+  when a mouse is present, which makes hover styles appear "broken".
+  Override these variants to apply hover styles unconditionally. */
+@custom-variant hover (&:hover);
+@custom-variant group-hover (&:is(:where(.group):hover *));
+
 @theme inline {
   --font-display: "Space Grotesk", system-ui, sans-serif;
   --font-body: "Inter", system-ui, sans-serif;
@@ -135,6 +142,13 @@
   .text-glow { text-shadow: 0 0 30px rgba(var(--surface-fg), 0.4); }
   .text-glow-soft { text-shadow: 0 0 20px rgba(var(--surface-fg), 0.25); }
   .border-glow { box-shadow: 0 0 0 1px rgba(var(--surface-fg), 0.1), 0 0 30px rgba(var(--surface-fg), 0.08); }
+
+  /* These are custom utilities (not built-in Tailwind), so Tailwind won't auto-generate
+     variant selectors like `hover:text-glow` / `group-hover:text-glow`. Define them here. */
+  .hover\:text-glow:hover { text-shadow: 0 0 30px rgba(var(--surface-fg), 0.4); }
+  .hover\:text-glow-soft:hover { text-shadow: 0 0 20px rgba(var(--surface-fg), 0.25); }
+  .group:hover .group-hover\:text-glow { text-shadow: 0 0 30px rgba(var(--surface-fg), 0.4); }
+  .group:hover .group-hover\:text-glow-soft { text-shadow: 0 0 20px rgba(var(--surface-fg), 0.25); }
 
   .sweep-border { position: relative; isolation: isolate; }
   .sweep-border::before {
