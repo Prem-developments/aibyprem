@@ -1,0 +1,318 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* Tailwind v4 wraps `hover:*` utilities in `@media (hover: hover)`.
+  Some embedded previews / touch-first environments report `(hover: none)` even
+  when a mouse is present, which makes hover styles appear "broken".
+  Override these variants to apply hover styles unconditionally. */
+@custom-variant hover (&:hover);
+@custom-variant group-hover (&:is(:where(.group):hover *));
+
+@theme inline {
+  --font-display: "Space Grotesk", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+:root {
+  --radius: 0.75rem;
+
+  /* LIGHT — inverted luxury palette */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0 0 0);
+  --card: oklch(0.985 0 0);
+  --card-foreground: oklch(0 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0 0 0);
+  --primary: oklch(0 0 0);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.96 0 0);
+  --secondary-foreground: oklch(0 0 0);
+  --muted: oklch(0.96 0 0);
+  --muted-foreground: oklch(0.4 0 0);
+  --accent: oklch(0.94 0 0);
+  --accent-foreground: oklch(0 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0 0 0 / 0.12);
+  --input: oklch(0 0 0 / 0.15);
+  --ring: oklch(0 0 0 / 0.5);
+
+  --surface-fg: 0, 0, 0;
+  --surface-bg: 255, 255, 255;
+}
+
+.dark {
+  /* DARK — original pure-black tech palette */
+  --background: oklch(0 0 0);
+  --foreground: oklch(1 0 0);
+  --card: oklch(0.04 0 0);
+  --card-foreground: oklch(1 0 0);
+  --popover: oklch(0.04 0 0);
+  --popover-foreground: oklch(1 0 0);
+  --primary: oklch(1 0 0);
+  --primary-foreground: oklch(0 0 0);
+  --secondary: oklch(0.12 0 0);
+  --secondary-foreground: oklch(1 0 0);
+  --muted: oklch(0.15 0 0);
+  --muted-foreground: oklch(0.7 0 0);
+  --accent: oklch(0.18 0 0);
+  --accent-foreground: oklch(1 0 0);
+  --border: oklch(1 0 0 / 0.12);
+  --input: oklch(1 0 0 / 0.15);
+  --ring: oklch(1 0 0 / 0.5);
+
+  --surface-fg: 255, 255, 255;
+  --surface-bg: 0, 0, 0;
+}
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  * { border-color: var(--color-border); }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+  ::selection {
+    background: rgba(var(--surface-fg), 0.2);
+    color: rgb(var(--surface-fg));
+  }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: rgb(var(--surface-bg)); }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(var(--surface-fg), 0.15);
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(var(--surface-fg), 0.3); }
+}
+
+@layer utilities {
+  .bg-grid {
+    background-image:
+      linear-gradient(rgba(var(--surface-fg), 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(var(--surface-fg), 0.05) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .bg-grid-fade {
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 80%);
+  }
+
+  .radial-spotlight {
+    background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(var(--surface-fg), 0.06), transparent 70%);
+  }
+
+  .text-glow { text-shadow: 0 0 30px rgba(var(--surface-fg), 0.4); }
+  .text-glow-soft { text-shadow: 0 0 20px rgba(var(--surface-fg), 0.25); }
+  .border-glow { box-shadow: 0 0 0 1px rgba(var(--surface-fg), 0.1), 0 0 30px rgba(var(--surface-fg), 0.08); }
+
+  /* These are custom utilities (not built-in Tailwind), so Tailwind won't auto-generate
+     variant selectors like `hover:text-glow` / `group-hover:text-glow`. Define them here. */
+  .hover\:text-glow:hover { text-shadow: 0 0 30px rgba(var(--surface-fg), 0.4); }
+  .hover\:text-glow-soft:hover { text-shadow: 0 0 20px rgba(var(--surface-fg), 0.25); }
+  .group:hover .group-hover\:text-glow { text-shadow: 0 0 30px rgba(var(--surface-fg), 0.4); }
+  .group:hover .group-hover\:text-glow-soft { text-shadow: 0 0 20px rgba(var(--surface-fg), 0.25); }
+
+  .sweep-border { position: relative; isolation: isolate; }
+  .sweep-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: conic-gradient(
+      from var(--angle, 0deg),
+      transparent 0%,
+      transparent 70%,
+      rgba(var(--surface-fg), 0.9) 85%,
+      transparent 100%
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+  .sweep-border:hover::before {
+    opacity: 1;
+    animation: sweep-rotate 2.5s linear infinite;
+  }
+
+  @property --angle {
+    syntax: "<angle>";
+    initial-value: 0deg;
+    inherits: false;
+  }
+
+  @keyframes sweep-rotate { to { --angle: 360deg; } }
+
+  .gradient-sweep-line {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(var(--surface-fg), 0.6),
+      rgba(0, 240, 255, 0.4),
+      rgba(var(--surface-fg), 0.6),
+      transparent
+    );
+    background-size: 200% 100%;
+    animation: gradient-sweep 6s linear infinite;
+  }
+
+  @keyframes gradient-sweep {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .marquee { animation: marquee 40s linear infinite; }
+  .marquee-reverse { animation: marquee 40s linear infinite reverse; }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  @keyframes float-orb {
+    0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.4; }
+    50% { transform: translate(30px, -40px) scale(1.1); opacity: 0.7; }
+  }
+  .animate-float-orb { animation: float-orb 12s ease-in-out infinite; }
+
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(var(--surface-fg), 0.5), 0 0 20px rgba(var(--surface-fg), 0.2); }
+    50% { box-shadow: 0 0 0 8px rgba(var(--surface-fg), 0), 0 0 40px rgba(var(--surface-fg), 0.4); }
+  }
+  .hover\:animate-glow-pulse:hover {
+    animation: glow-pulse 1.8s ease-in-out infinite;
+  }
+
+  .shimmer { position: relative; overflow: hidden; }
+  .shimmer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      115deg,
+      transparent 30%,
+      rgba(var(--surface-fg), 0.08) 48%,
+      rgba(var(--surface-fg), 0.18) 50%,
+      rgba(var(--surface-fg), 0.08) 52%,
+      transparent 70%
+    );
+    transform: translateX(-100%);
+    transition: transform 0.9s ease;
+    pointer-events: none;
+  }
+  .shimmer:hover::after { transform: translateX(100%); }
+
+  .glass {
+    background: rgba(var(--surface-bg), 0.55);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+    border: 1px solid rgba(var(--surface-fg), 0.08);
+  }
+
+  .font-display { font-family: var(--font-display); }
+  .font-body { font-family: var(--font-body); }
+
+  /* Themed surface tokens for components built with white/black classes */
+  .surface-card {
+    background: rgb(var(--surface-bg));
+    border: 1px solid rgba(var(--surface-fg), 0.1);
+  }
+}
+
+/* ----------------------------------------------------------
+   Theme swap: in LIGHT mode, components written with
+   text-white / bg-white / border-white become themed.
+   This lets the same components serve both modes cleanly.
+   ---------------------------------------------------------- */
+:root:not(.dark) .themed {
+  /* Text colors */
+  --tw-text-opacity: 1;
+}
+:root:not(.dark) .themed .text-white { color: rgb(0 0 0 / var(--tw-text-opacity, 1)); }
+:root:not(.dark) .themed .text-white\/80 { color: rgb(0 0 0 / 0.8); }
+:root:not(.dark) .themed .text-white\/70 { color: rgb(0 0 0 / 0.7); }
+:root:not(.dark) .themed .text-white\/65 { color: rgb(0 0 0 / 0.65); }
+:root:not(.dark) .themed .text-white\/60 { color: rgb(0 0 0 / 0.6); }
+:root:not(.dark) .themed .text-white\/55 { color: rgb(0 0 0 / 0.55); }
+:root:not(.dark) .themed .text-white\/45 { color: rgb(0 0 0 / 0.45); }
+:root:not(.dark) .themed .text-white\/40 { color: rgb(0 0 0 / 0.4); }
+:root:not(.dark) .themed .text-black { color: rgb(255 255 255); }
+
+:root:not(.dark) .themed .bg-white { background-color: rgb(0 0 0); }
+:root:not(.dark) .themed .bg-white\/5 { background-color: rgb(0 0 0 / 0.04); }
+:root:not(.dark) .themed .bg-white\/\[0\.03\] { background-color: rgb(0 0 0 / 0.03); }
+:root:not(.dark) .themed .bg-white\/\[0\.04\] { background-color: rgb(0 0 0 / 0.04); }
+:root:not(.dark) .themed .bg-white\/\[0\.06\] { background-color: rgb(0 0 0 / 0.05); }
+:root:not(.dark) .themed .bg-white\/\[0\.01\] { background-color: rgb(0 0 0 / 0.01); }
+:root:not(.dark) .themed .bg-white\/10 { background-color: rgb(0 0 0 / 0.08); }
+:root:not(.dark) .themed .bg-black { background-color: rgb(255 255 255); }
+:root:not(.dark) .themed .bg-\[\#070707\] { background-color: rgb(250 250 250); }
+
+:root:not(.dark) .themed .border-white { border-color: rgb(0 0 0); }
+:root:not(.dark) .themed .border-white\/5 { border-color: rgb(0 0 0 / 0.06); }
+:root:not(.dark) .themed .border-white\/10 { border-color: rgb(0 0 0 / 0.1); }
+:root:not(.dark) .themed .border-white\/15 { border-color: rgb(0 0 0 / 0.12); }
+:root:not(.dark) .themed .border-white\/20 { border-color: rgb(0 0 0 / 0.18); }
+:root:not(.dark) .themed .border-white\/25 { border-color: rgb(0 0 0 / 0.22); }
+:root:not(.dark) .themed .border-white\/30 { border-color: rgb(0 0 0 / 0.25); }
+:root:not(.dark) .themed .border-white\/40 { border-color: rgb(0 0 0 / 0.4); }
+
+:root:not(.dark) .themed .from-white\/10 { --tw-gradient-from: rgb(0 0 0 / 0.08) var(--tw-gradient-from-position); }
+:root:not(.dark) .themed .from-white\/\[0\.06\] { --tw-gradient-from: rgb(0 0 0 / 0.05) var(--tw-gradient-from-position); }
+:root:not(.dark) .themed .via-white\/60 { --tw-gradient-via: rgb(0 0 0 / 0.55) var(--tw-gradient-via-position); }
+:root:not(.dark) .themed .from-white { --tw-gradient-from: rgb(0 0 0); }
+
+/* Hover variants */
+:root:not(.dark) .themed .hover\:bg-white:hover { background-color: rgb(0 0 0); }
+:root:not(.dark) .themed .hover\:text-white:hover { color: rgb(0 0 0); }
+:root:not(.dark) .themed .hover\:text-black:hover { color: rgb(255 255 255); }
+:root:not(.dark) .themed .hover\:bg-white\/5:hover { background-color: rgb(0 0 0 / 0.05); }
+:root:not(.dark) .themed .hover\:border-white:hover { border-color: rgb(0 0 0); }
+:root:not(.dark) .themed .hover\:border-white\/25:hover { border-color: rgb(0 0 0 / 0.22); }
+:root:not(.dark) .themed .hover\:border-white\/30:hover { border-color: rgb(0 0 0 / 0.25); }
+:root:not(.dark) .themed .hover\:border-white\/40:hover { border-color: rgb(0 0 0 / 0.4); }
+
+/* Focus */
+:root:not(.dark) .themed .focus\:border-white\/40:focus { border-color: rgb(0 0 0 / 0.4); }
