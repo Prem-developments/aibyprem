@@ -16,6 +16,40 @@ const EMAIL_TO_NAME = "Prem Chand";
 
 const SERVICES = ["AI Automation", "CRM Setup", "Chatbot", "Other"];
 
+function formatEmailJsError(err: unknown) {
+  const origin =
+    typeof window !== "undefined" && window.location && window.location.origin
+      ? window.location.origin
+      : "(unknown origin)";
+
+  if (err instanceof Error) {
+    const message = err.message || "Unknown error";
+    const hint = /not configured/i.test(message)
+      ? "Set VITE_EMAILJS_SERVICE_ID, VITE_EMAILJS_TEMPLATE_ID, and VITE_EMAILJS_PUBLIC_KEY in your deployment environment and redeploy."
+      : /origin|forbidden|unauthorized|403/i.test(message)
+        ? `If this works on localhost but not on ${origin}, add ${origin} to EmailJS \"Allowed origins\" (and redeploy if needed).`
+        : "";
+    return hint ? `${message}\n${hint}` : message;
+  }
+
+  if (typeof err === "object" && err) {
+    const anyErr = err as { status?: unknown; text?: unknown; message?: unknown };
+    const status = typeof anyErr.status === "number" ? anyErr.status : undefined;
+    const text = typeof anyErr.text === "string" ? anyErr.text : undefined;
+    const message = typeof anyErr.message === "string" ? anyErr.message : undefined;
+    const base = [status != null ? String(status) : undefined, text || message]
+      .filter(Boolean)
+      .join(": ");
+    const combined = base || "Unknown error";
+    const hint = /origin|forbidden|unauthorized|403/i.test(combined)
+      ? `If this works on localhost but not on ${origin}, add ${origin} to EmailJS \"Allowed origins\".`
+      : "";
+    return hint ? `${combined}\n${hint}` : combined;
+  }
+
+  return String(err);
+}
+
 async function sendEmail(params: {
   name: string;
   email: string;
@@ -139,6 +173,8 @@ export function Contact() {
   const [callService, setCallService] = useState("");
   const [sending, setSending] = useState(false);
   const [callSending, setCallSending] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [callSubmitError, setCallSubmitError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>, source: string) => {
     e.preventDefault();
@@ -193,12 +229,14 @@ export function Contact() {
           onSubmit={(e) => {
             if (sending || submitted) return;
             setSending(true);
+            setSubmitError(null);
             void handleSubmit(e, "New Website Inquiry")
               .then(() => {
                 setSubmitted(true);
               })
               .catch((err) => {
                 console.error(err);
+                setSubmitError(formatEmailJsError(err));
               })
               .finally(() => {
                 setSending(false);
@@ -244,6 +282,12 @@ export function Contact() {
                 ? "Sending…"
                 : "Send Message"}
           </button>
+
+          {submitError && (
+            <p className="rounded-xl border border-white/15 bg-white/[0.03] px-4 py-3 text-sm text-white/70 whitespace-pre-line">
+              {submitError}
+            </p>
+          )}
         </motion.form>
 
         <motion.div
@@ -269,6 +313,7 @@ export function Contact() {
                 setCallSubmitted(false);
                 setCallService("");
                 setCallSending(false);
+                setCallSubmitError(null);
               }
             }}
           >
@@ -296,12 +341,14 @@ export function Contact() {
                 onSubmit={(e) => {
                   if (callSending || callSubmitted) return;
                   setCallSending(true);
+                  setCallSubmitError(null);
                   void handleSubmit(e, "Free 30-min Call Request")
                     .then(() => {
                       setCallSubmitted(true);
                     })
                     .catch((err) => {
                       console.error(err);
+                      setCallSubmitError(formatEmailJsError(err));
                     })
                     .finally(() => {
                       setCallSending(false);
@@ -346,6 +393,12 @@ export function Contact() {
                       ? "Sending…"
                       : "Request a Call"}
                 </button>
+
+                {callSubmitError && (
+                  <p className="rounded-xl border border-white/15 bg-white/[0.03] px-4 py-3 text-sm text-white/70 whitespace-pre-line">
+                    {callSubmitError}
+                  </p>
+                )}
               </form>
             </DialogContent>
           </Dialog>
